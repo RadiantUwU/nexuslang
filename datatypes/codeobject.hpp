@@ -105,9 +105,9 @@ namespace CodeObjectDataTypes {
         unordered_map<long long, gc::Generic> enviroment;
         string functionname;
         CodeObject* parent = nullptr;
-        CodeObject() : functionname("__main__") {}
-        CodeObject(string functionname,CodeObject* parent)
-        : functionname(functionname), parent(parent) {}
+        CodeObject() noexcept : functionname("__main__") {}
+        CodeObject(string functionname,CodeObject* parent) noexcept
+        : functionname(functionname), parent(parent) {} 
         
     };
 };
