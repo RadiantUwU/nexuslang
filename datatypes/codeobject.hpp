@@ -2,36 +2,33 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "gc.hpp"
+#include <memory>
 namespace CodeObjectDataTypes {
     using std::string;
     using std::vector;
     using std::unordered_map;
-    enum TokenType {
+    enum class TokenType {
         NONE,
         TOKEN,
         OPERATOR,
+        KEYWORD,
+        FUNCTION_NAME,
+        FUNCTION_ARGS,
         START_CODEBLOCK,
         END_CODEBLOCK,
-        START_IF,
-        START_ELIF,
-        ELSE,
-        END_IF,
+        END,
         STRING_LITERAL,
         INTEGER_LITERAL,
         NUMBER_LITERAL,
         BOOLEAN_LITERAL,
         NULL_LITERAL,
-        FOR,
-        IN,
         START_INDEX,
         END_INDEX,
         START_GROUP,
         END_GROUP,
         START_TABLE,
         END_TABLE,
-        DELIMITER,
-        DEL
+        DELIMITER
     };
     struct Token final {
         TokenType type;
@@ -39,7 +36,7 @@ namespace CodeObjectDataTypes {
         Token(TokenType type = TokenType::NONE, string value = "") : type(type), value(value) {}
         Token() : type(TokenType::NONE), value("") {}
     };
-    enum InstructionType {
+    enum class InstructionType {
         NOOP,
         ADD,
         SUB,
@@ -93,6 +90,7 @@ namespace CodeObjectDataTypes {
         SETATTR,
         DELATTR,
         CALL,
+        NEW_FUNCTION
     };
     class Instruction final {
     public:
@@ -102,12 +100,14 @@ namespace CodeObjectDataTypes {
     class CodeObject {
     public:
         vector<Instruction> instructions;
-        unordered_map<long long, gc::Generic> enviroment;
+        unordered_map<long long, std::shared_ptr<void>> enviroment;
         string functionname;
+        vector<string> functionargs;
+        vector<std::shared_ptr<void>> stack;
         CodeObject* parent = nullptr;
         CodeObject() noexcept : functionname("__main__") {}
         CodeObject(string functionname,CodeObject* parent) noexcept
         : functionname(functionname), parent(parent) {} 
-        
+        vector<std::shared_ptr<void>> run();
     };
 };

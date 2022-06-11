@@ -53,6 +53,7 @@ public:
 class _nType : public _nObj {
 public:
     virtual hash_t safe_hash() const;
+    
 };
 hash_t _nObj::safe_hash() const {
     return C_hash_objects(this);

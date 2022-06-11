@@ -1,5 +1,7 @@
 #pragma once
-#include "gc.hpp"
+
+#include <memory>
+
 class CodeObject;
 class _Interpreter {
 private:
@@ -12,8 +14,8 @@ public:
         return &instance;
     }
     CodeObject* mainfunction;
-    gc::Generic trueObject;
-    gc::Generic falseObject;
-    gc::Generic nullObject;
+    std::shared_ptr<void> trueObject;
+    std::shared_ptr<void> falseObject;
+    std::shared_ptr<void> nullObject;
 };
 _Interpreter& Interpreter = *_Interpreter::__getInstance();
